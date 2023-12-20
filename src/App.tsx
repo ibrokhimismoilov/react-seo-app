@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Suspense, lazy } from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-function App() {
+const Home = lazy(() => import("./pages/Home"));
+const About = lazy(() => import("./pages/About"));
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HelmetProvider>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Main page</title>
+        <link rel="canonical" href="https://www.tacobell.com/" />
+        <meta name="description" content="Home page description" />
+      </Helmet>
+
+      <BrowserRouter>
+        <nav>
+          <Link to={"/"}>Home</Link> <Link to={"/about"}>About</Link>
+        </nav>
+        <Suspense fallback={"Loading..."}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </HelmetProvider>
   );
-}
+};
 
 export default App;
